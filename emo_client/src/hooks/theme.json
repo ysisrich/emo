@@ -1,0 +1,25 @@
+
+{
+    "white":{
+        "--maincolor": "#000000",
+        "--mainbgcolor": "#ffffff",
+        "--skinbgcolor":"rgba(102,102,102)",
+        "--headerbgcolor":"#eaedf1",
+        "--searchbgcolor":"#ffffff",
+        "--mainbordercolor":"1px soild #25252b",
+        "--indexmorebgcolor":"#f3f5f7",
+        "--indexmorecolor":"#4e4f4f",
+        "--indextimecolor":"rgba(47,48,53,.4);"
+    },
+    "black":{
+        "--maincolor": "#ffffff",
+        "--mainbgcolor": "#16161a",
+        "--skinbgcolor":"rgba(9,9,0)",
+        "--headerbgcolor":"#16161a",
+        "--searchbgcolor":"#25252b",
+        "--mainbordercolor":"1px soild #eaedf1",
+        "--indexmorebgcolor":"#25252b",
+        "--indexmorecolor":"#a8a8aa",
+        "--indextimecolor":"#8b8b8d"
+    }
+}

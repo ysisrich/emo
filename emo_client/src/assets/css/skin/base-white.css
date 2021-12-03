@@ -1,0 +1,11 @@
+:root{
+    --maincolor: #000000;
+    --mainbgcolor: #ffffff;
+    --otherbgcolor:#eaedf1;
+}
+
+
+html,body{
+    color: #000000;
+    background: #ffffff;
+}
