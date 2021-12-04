@@ -1,5 +1,5 @@
 <template>
-  <div class="video">
+  <div class="video" v-show="data.sources.video_url">
     <video-player class="video-player vjs-custom-skin"
             ref="videoPlayer"
             :playsinline="true"
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { reactive } from '@vue/reactivity'
+import { reactive,computed,onUpdated} from 'vue'
 
 export default {
   name: 'Video',
@@ -39,8 +39,26 @@ export default {
             remainingTimeDisplay: false, // 是否显示剩余时间功能
             fullscreenToggle: true // 是否显示全屏按钮
           }
+        },
+        sources:{
+          video_url:props.video,
+          cover:props.cover
         }
     })
+
+      //计算属性——完整写法（考虑读和写）
+        data.playerOptions.sources = computed({
+          get(){
+            return data.sources.video_url
+          },
+          set(value){
+            data.sources.video_url = props.video
+          }
+        })
+
+      onUpdated(()=>{
+        data.playerOptions.sources = data.sources.video_url
+      })
     return {
       data
     }

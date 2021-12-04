@@ -12,5 +12,7 @@ export const addVideo = (params={}) => post('/api/video/addVideo',params);
 
 export const getVideoOne = (params={}) => get('/api/video/getVideoOne',params);
 
+export const getVideoRecommendList = (params={}) => get('/api/video/getVideoRecommendList',params);
+
 export const putVideoOne = (params={}) => post('/api/video/putVideoOne',params);
 

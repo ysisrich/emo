@@ -1,4 +1,5 @@
 <template>
+<div>
     <div class="index-title">
         <div>
             <img src="@/assets/img/icon/video.png"  alt="视频"> 视频
@@ -29,7 +30,7 @@
         </div>
     </div>
 
-  
+  </div>
 </template>
 
 <script>

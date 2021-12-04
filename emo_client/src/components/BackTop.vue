@@ -37,7 +37,7 @@ export default {
 <style lang="scss"  scoped>
 span{
     position: fixed;
-    bottom: 105px;
+    bottom: 152px;
     right: 30px;
     display: block;
     width: 36px;

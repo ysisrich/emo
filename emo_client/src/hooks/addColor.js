@@ -15,7 +15,7 @@ export function addColor (init){
         if(init)
             Object.assign(obj,theme == 'black'? black : white)
         else{
-            localStorage.setItem('theme',theme == 'black'?' white' : 'black')
+            localStorage.setItem('theme',theme == 'black'?'white' : 'black')
             Object.assign(obj,theme == 'black'? white : black)
         }
     }

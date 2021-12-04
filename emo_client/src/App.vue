@@ -6,7 +6,8 @@
     </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     <ChangeTheme/> 
-    <BackTop />   
+    <BackTop /> 
+    <Record />  
     
 </template>
 
@@ -14,11 +15,12 @@
 
 import ChangeTheme from '@/components/ChangeTheme';
 import BackTop from '@/components/BackTop';
+import Record from './components/Record.vue';
 
 export default {
   name: 'App',
   components: {
-    ChangeTheme,BackTop
+    ChangeTheme,BackTop,Record
   },
   setup(){
         

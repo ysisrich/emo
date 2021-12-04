@@ -1,27 +1,26 @@
 <template>
     <span @click="addColor(false)"  class="skin">
-        <img v-if="theme === 'white'" src="@/assets/img/icon/black.png" alt="换肤" class="skin-icon">
-        <img v-else src="@/assets/img/icon/white.png" alt="换肤" class="skin-icon">
+        <span v-if="theme_key == 'white'" @click="theme_key='black'">
+            <img  src="@/assets/img/icon/black.png" alt="换肤" class="skin-icon" >
+        </span>
+        <span v-else @click="theme_key='white'">
+            <img  src="@/assets/img/icon/white.png" alt="换肤" class="skin-icon" >
+        </span> 
     </span>
 </template>
 
 <script>
-import { ref  } from 'vue';
+import { onMounted, reactive, ref,watch  } from 'vue';
 
 import { addColor } from '../hooks/addColor';
 
 export default {
   name: 'ChangeTheme',
   setup(){
-        let theme =ref(localStorage.theme)
-			// console.log(theme)
+        let theme_key =ref(localStorage.theme)
 
-        //  watch(theme,(newValue,oldValue)=>{
-		// 		// console.log('theme',newValue,oldValue)
-		// 	},{immediate:true}) 
-        
         return {
-            theme:theme,
+            theme_key,
             addColor
         }
     }
@@ -37,22 +36,31 @@ export default {
     display: block;
     width: 36px;
     height: 36px;
-    padding: 11px;
+    // padding: 11px;
     border-radius: 18px;
     box-sizing: border-box;
     background: var(--skinbgcolor);
-    // opacity: .5;
-    cursor: pointer;
-    &-icon{
-        vertical-align: super;
+    overflow: hidden;
+    span{
+        display: block;
         width: 100%;
         height: 100%;
+        padding: 11px;
+        box-sizing: border-box;
+
+        cursor: pointer;
+        .skin-icon{
+            vertical-align: super;
+            width: 100%;
+            height: 100%;
+        }
+        &:hover{
+            background: #ff2a14;
+        }
+        
     }
-    &:hover{
-        background: #ff2a14;
-        // background: linear-gradient(rgba(231, 42, 21, 0.8), rgba(255,42,20,1));
-        transition-delay: .2s;
-    }
+    // opacity: .5;
+    
 }
 
 

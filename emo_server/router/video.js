@@ -44,7 +44,7 @@ router.get('/getVideoList', async (req, res) => {
 })
 
 
-// 获取video数据列表
+// 根据id获取video
 router.get('/getVideoOne', async (req, res) => {
 	
 	//接收客户通过按钮页传过来的参数
@@ -59,6 +59,23 @@ router.get('/getVideoOne', async (req, res) => {
 	  res.json({code:201,msg:'暂无数据！'})
 	}
 })
+
+// 获取video数据推荐列表
+router.get('/getVideoRecommendList', async (req, res) => {
+	
+	//接收客户通过按钮页传过来的参数
+	// console.log(req.query)
+	const {id} = req.query
+	
+	const video = await Video.find({"_id" : {"$ne": id}}).sort([['heat','desc']]).limit(10).exec();
+	
+	if(video){
+	  res.json({code:200,msg:'获取列表成功！',data:video})
+	}else{
+	  res.json({code:201,msg:'暂无数据！'})
+	}
+})
+
 
 
 module.exports = router
