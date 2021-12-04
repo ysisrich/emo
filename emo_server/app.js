@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 const logger = require('morgan')
 const mongod = require('./db/index')
 const Video = require('./router/video')
+const Comment = require('./router/comment')
 
 mongod.then(res=>{
 	console.log(res)
@@ -45,5 +46,6 @@ app.use(session({ // 使用session
 }))
 
 app.use('/video', Video)
+app.use('/comment', Comment)
 
-app.listen(3000,()=>console.log('服务器开启成功！！！'))
+app.listen(3001,()=>console.log('服务器开启成功！！！'))

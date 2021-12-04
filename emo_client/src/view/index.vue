@@ -36,7 +36,7 @@
 <script>
 
 import { reactive } from '@vue/reactivity'
-import {getVideoList} from '../../config/api'
+import {getVideoList,addVideo} from '../../config/api'
 import dateParse from '../hooks/dateParse'
 import {useRouter} from 'vue-router'
 
@@ -44,10 +44,6 @@ import {useRouter} from 'vue-router'
 //   title: String,
 //   category: Number, //  情感 幽默  影视  游戏
 //   heat: Number,  // ❤热度
-//   commentId: { 		// 评论
-//     type: String,
-//     unique: true
-//   },
 //   cover: String,  // 封面
 //   createTime: {
 //     type: Date,
@@ -57,16 +53,60 @@ import {useRouter} from 'vue-router'
 //   video_url:String
 
 
-// let params = {
-//     title:'这首歌已经过去七年了。',
-//     category:0,
-//     heat:8550,
-//     commentId:9,
-//     cover:'https://nav.yangsong.cool/uploads/cover/6.png',
-//     video_url:'https://nav.yangsong.cool/uploads/video/5.mp4'
 
-// }
-// addVideo(params).then(res=>console.log(res))
+let array = [
+    {
+        title:'要是那天，我抓住你就好了',
+        category:0,
+        heat:850,
+        cover:'https://nav.yangsong.cool/uploads/video/1.jpg',
+        video_url:'https://nav.yangsong.cool/uploads/video/1.mp4'
+    },
+    {
+        title:'“你啊，年龄到了，有些事就妥协了，对吗？”',
+        category:0,
+        heat:1000,
+        cover:'https://nav.yangsong.cool/uploads/video/2.png',
+        video_url:'https://nav.yangsong.cool/uploads/video/2.mp4'
+    },
+    {
+        title:'这辈子人潮汹涌，感谢遇见你。#人潮汹涌感谢遇见你',
+        category:0,
+        heat:403,
+        cover:'https://nav.yangsong.cool/uploads/video/3.png',
+        video_url:'https://nav.yangsong.cool/uploads/video/3.mp4'
+    },
+    {
+        title:'分享给谁呢',
+        category:0,
+        heat:3540,
+        cover:'https://nav.yangsong.cool/uploads/video/4.png',
+        video_url:'https://nav.yangsong.cool/uploads/video/4.mp4'
+    },
+    {
+        title:'2021年没有秋天，可是冬天来了也不会一起吃烤红薯和滑雪',
+        category:0,
+        heat:5533,
+        cover:'https://nav.yangsong.cool/uploads/video/5.png',
+        video_url:'https://nav.yangsong.cool/uploads/video/5.mp4'
+    },
+    {
+        title:'“我没有一天不在思念你”',
+        category:0,
+        heat:8770,
+        cover:'https://nav.yangsong.cool/uploads/video/6.jpg',
+        video_url:'https://nav.yangsong.cool/uploads/video/6.mp4'
+    },
+    {
+        title:'这首歌已经过去七年了。',
+        category:0,
+        heat:7750,
+        cover:'https://nav.yangsong.cool/uploads/video/7.png',
+        video_url:'https://nav.yangsong.cool/uploads/video/7.mp4'
+    }
+]
+
+// array.forEach(item=>addVideo(item))
 
 
 

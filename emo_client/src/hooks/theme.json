@@ -11,7 +11,11 @@
         "--indexmorecolor":"#4e4f4f",
         "--indextimecolor":"rgba(47,48,53,.4);",
 
-        "--videoindextitltcolor":"#2f3035"
+        "--videoindextitltcolor":"#2f3035",
+        "--commentusernamecolor":"#6d6e71",
+        "--commentcolor":"#acacae",
+        "--commentbordercolor":"#f1f2f5"
+
     },
     "black":{
         "--maincolor": "#ffffff",
@@ -24,6 +28,10 @@
         "--indexmorecolor":"#a8a8aa",
         "--indextimecolor":"#8b8b8d",
 
-        "--videoindextitltcolor":"#e8e8e9"
+        "--videoindextitltcolor":"#e8e8e9",
+        "--commentusernamecolor":"#bababd",
+        "--commentcolor":"#8b8b91",
+        "--commentbordercolor":"#1d1e29"
+
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="search-head" >
         <div class="search-head-title">EMO</div>
-
+        
         <div class="search-head-box" :class="{fixed:data.goTopShow}">
             <input type="text" placeholder="客官慢点搜索！" v-model="data.searchData">
             <img src="@/assets/img/icon/search.png" alt="搜索">

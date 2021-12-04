@@ -1,9 +1,9 @@
 <template>
-  <div class="default-head">
-    <div class="default-head-fixed"><Header /></div>
+  <div class="_default-head">
+    <div class="_default-head-fixed"><Header /></div>
     <Search />
   </div>
-  <div class="default-container">
+  <div class="_default-container">
     <Content />
   </div>
   <Footer />   
@@ -24,7 +24,7 @@
 	};
 </script>
 <style lang="scss" scoped>
-    .default-head{
+    ._default-head{
         width: 100%;
         height: 250px;
         background: var(--headerbgcolor);
@@ -37,7 +37,7 @@
           z-index: 98;
         }
     }
-	.default-container{
+	._default-container{
         width: 1205px;
         margin: auto;
         background: var(--mainbgcolor);

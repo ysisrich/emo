@@ -1,22 +1,22 @@
 <template>
     <div class="_video">
 
-        <div class="_video-player" v-if="data.VideoInfo.video_url">
+        <div class="_video-player" v-if="VideoInfo.video_url">
             <div class="myvideo" >
-                <MyVideo :video="data.VideoInfo.video_url" :cover="data.VideoInfo.cover" /> 
+                <MyVideo :video="VideoInfo.video_url" :cover="VideoInfo.cover" /> 
             </div>
             <div class="_video-player-info">
-                <div class="title">{{data.VideoInfo.title}}</div>
+                <div class="title">{{VideoInfo.title}}</div>
                 <div class="action">
                     <div>
-                        <span @click="data.isChecked = !data.isChecked">
-                            <img v-if="!data.isChecked " src="@/assets/img/icon/love.png" alt="">
+                        <span @click="isChecked = !isChecked">
+                            <img v-if="!isChecked " src="@/assets/img/icon/love.png" alt="">
                             <img v-else src="@/assets/img/icon/love-checked.png" alt="">
-                            <span class="data">{{data.VideoInfo.heat}}</span>
+                            <span class="data">{{VideoInfo.heat}}</span>
                         </span>
                         <span>
                             <img src="@/assets/img/icon/comment.png" alt="">
-                            <span class="data">{{data.VideoInfo.heat}}</span>
+                            <span class="data">{{VideoInfo.heat}}</span>
                         </span>
 
                         <span>
@@ -29,17 +29,20 @@
                         </span>
                     </div>
                     <div>
-                        <span class="time">发布时间：{{data.VideoInfo.createTime}}</span>
+                        <span class="time">发布时间：{{VideoInfo.createTime}}</span>
                     </div>
                     
                 </div>
             </div>
+
+            <!-- 评论 -->
+                <Comment  :list="CommentList" />
         </div>
 
         <div class="_video-other">
             <div class="_video-other-recommend">推荐视频</div>
             <div class="recommend-list">
-                <div  v-for="(item,index) in data.VideoRecommendList" :key="`recom-${index}`" @click="handleRecommend(item)">
+                <div  v-for="(item,index) in VideoRecommendList" :key="`recom-${index}`" @click="handleRecommend(item)">
                     <div>
                         <img :src="item.cover" alt="">
                     </div>
@@ -54,22 +57,29 @@
 </template>
 
 <script>
-import { reactive } from '@vue/reactivity'
+import { reactive, toRefs } from '@vue/reactivity'
 import {useRoute,useRouter} from 'vue-router'
-import {getVideoOne,getVideoRecommendList} from '../../../config/api'
+import {getVideoOne,getVideoRecommendList,getCommentOne} from '../../../config/api'
 import MyVideo from '@/components/Video'
 import { onMounted, onUpdated,computed, onBeforeUpdate, watch} from '@vue/runtime-core'
-
+// import Comment from '@/components/video/Comment'
 import moment from 'moment'
+import {defineAsyncComponent } from 'vue'
 
 export default {
     name: 'VideoIndex',
-    components:{MyVideo},
+    components: {
+        MyVideo,
+        Comment: defineAsyncComponent(() =>
+            import('@/components/video/Comment.vue')
+        )
+    },
     
     setup() {
         let data = reactive({
             VideoInfo:{},
             VideoRecommendList:[],
+            CommentList:[],
             isChecked:false
         })
 
@@ -83,7 +93,17 @@ export default {
                 data.VideoInfo = res.data
                 data.VideoInfo.createTime = moment(data.VideoInfo.createTime).format('YYYY-MM-DD HH:mm')
             }else{
-                alert(data.msg)
+                alert(res.msg)
+            }
+        })
+
+        getCommentOne({id:route.params.id}).then(res=>{
+            if(res.code == 200){
+                data.CommentList = res.data
+                data.CommentList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD'))
+                // console.log(data.CommentList)
+            }else{
+                alert(res.msg)
             }
         })
 
@@ -93,9 +113,11 @@ export default {
                 data.VideoRecommendList = res.data
                 data.VideoRecommendList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm'))
             }else{
-                alert(data.msg)
+                alert(res.msg)
             }
         })
+
+        
 
        
         onMounted(()=>{
@@ -109,16 +131,19 @@ export default {
                     data.VideoRecommendList = res.data
                     data.VideoRecommendList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm'))
                 }else{
-                    alert(data.msg)
+                    alert(res.msg)
                 }
             })
+
+            
+
             router.push({path:`/video/${item._id}`})
         }
         
      
 
         return {
-            data,
+            ...toRefs(data),
             handleRecommend
         };
     }

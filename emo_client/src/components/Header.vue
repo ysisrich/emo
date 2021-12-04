@@ -44,6 +44,9 @@ export default {
         
         function handleMenu(item){
             data.current = item.id
+            if(item.id == 0){
+                router.push({name:'index'})
+            }
         }
 
         function toIndex(){
@@ -78,6 +81,9 @@ export default {
         background: var(--headerbgcolor);
         padding: 15px 0;
         font-weight: 700;
+        >div{
+            cursor: pointer;
+        }
         .header-category{
             list-style: none;
             @include flx(center,center);

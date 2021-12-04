@@ -58,7 +58,7 @@ module.exports = {
         // 设置代理
         proxy: {
             '/api': {
-                target: config.interfaceUrl, //目标接口域名
+                target: process.env.NODE_ENV == 'production' ? config.interfaceUrl : config.testUrl, //目标接口域名
                 secure: false, //false为http访问，true为https访问
                 changeOrigin: true, //是否跨域
                 pathRewrite: {

@@ -31,4 +31,9 @@ app.use(VideoPlayer)
 app.use(router)
 app.use(store)
 // app.use(Antd)
+
+
+
+
+
 app.mount('#app')

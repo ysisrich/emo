@@ -4,16 +4,16 @@
  * 请求拦截、相应拦截、错误统一处理
  */
  import axios from 'axios';
-
+ import config from './index';
 
   
  // 环境的切换
  if (process.env.NODE_ENV == 'development') {    
-     axios.defaults.baseURL = '';
+     axios.defaults.baseURL ='api' ;
  } else if (process.env.NODE_ENV == 'debug') {    
      axios.defaults.baseURL = '';
  } else if (process.env.NODE_ENV == 'production') {    
-     axios.defaults.baseURL = '';
+     axios.defaults.baseURL = config.interfaceUrl;
  }
 
   

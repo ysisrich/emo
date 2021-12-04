@@ -18,7 +18,7 @@ router.post('/addVideo', (req, res) => {
 	      console.log(err)
 	      res.json(err)
 	    } else {
-	      res.json(video)
+	      res.json({code:200,msg:'添加成功！'})
 	    }
 	  })
 })

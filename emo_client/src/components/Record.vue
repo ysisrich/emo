@@ -10,9 +10,18 @@
 export default {
   name: 'Record',
   setup(){
+        
+        function showRecord(){
+            let text = "🕙 2020-11-28 初始化Vue3项目,绘制页面 \n\n"+
+                       "🕙 2020-12-02  设计深、浅主题两套主题 \n\n"+
+                       "🕙 2020-12-03  使用视频插件播放视频 \n\n"
 
+
+                       
+            alert(text)
+        }
         return {
-            
+            showRecord
         }
     }
    

@@ -1,7 +1,8 @@
 module.exports = {
     // 请求接口地址
-	// interfaceUrl : "https://nav.yangsong.cool/",
-	interfaceUrl : "http://localhost:3000",
+	testUrl : "http://localhost:3001",
+	interfaceUrl : "http://emo_node.yangsong.cool",
+
 	
 	onLineUrl : "https://emo.yangsong.cool/"
 }

@@ -3,7 +3,7 @@
         <span v-if="theme_key == 'white'" @click="theme_key='black'">
             <img  src="@/assets/img/icon/black.png" alt="换肤" class="skin-icon" >
         </span>
-        <span v-else @click="theme_key='white'">
+        <span v-else-if="theme_key === 'black'" @click="theme_key='white'">
             <img  src="@/assets/img/icon/white.png" alt="换肤" class="skin-icon" >
         </span> 
     </span>
@@ -18,7 +18,19 @@ export default {
   name: 'ChangeTheme',
   setup(){
         let theme_key =ref(localStorage.theme)
+        // let data = reactive({
+        //     theme_key:'black'
+        // })
 
+        onMounted(()=>{
+            theme_key.value = localStorage.theme
+        })
+
+        watch(theme_key,(newValue,oldValue)=>{
+            console.log('sum的值变化了',newValue,oldValue)
+        })
+
+      
         return {
             theme_key,
             addColor
