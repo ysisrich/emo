@@ -34,38 +34,69 @@
                         <MyInput v-show="item._id == commentId && isShowMyInput" @ok="handlePublish($event,item._id)" class="child-input"/>
                    </div>
 
+                    <div v-if="item.children && item.children.length && item.children.length>=1 && !item.showChildComment" class="show-more-reply" @click="item.showChildComment=!item.showChildComment">
+                        <span>展开{{item.children.length}}条回复</span>
+                        <img src="@/assets/img/icon/arrow-down.png" alt="">
+                    </div>
                    <!-- 子评论content 第一个childreen 开始 -->
-                    <div v-if="item.children && item.children.length">
+                    <div v-if="item.showChildComment">
                         <div class="_video-comments child">
                             <div v-for="(item,index) in item.children" :key="`comm-${index}`">
                                 <div class="_video-omments-avatar">
                                     <img :src="require(`@/assets/img/avatar/${item.avatar}.png`)" alt="">
                                 </div>
                                 <div class="comment-data">
-                                <div class="username">
-                                    <span>{{item.username}}</span>
-                                    <span>{{item.createTime}}</span>
-                                </div>
-                                <div class="content" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
+                                    <div class="username">
+                                        <span>{{item.username}}</span>
+                                        <span>{{item.createTime}}</span>
+                                    </div>
+                                    <div class="content" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
 
-                                <!-- <div class="child-content">
-                                    <span class="heat" @click="handleheat(item)">
-                                            <img v-if="!heatCheckedList.includes(item._id)" src="@/assets/img/icon/_love.png" alt="" >
-                                            <img v-else src="@/assets/img/icon/love-checked.png" alt="" >
-                                            <span class="data">{{heatCheckedList.includes(item._id)?item.heat+1 : item.heat}}</span>
-                                        </span>
-                                        <span class="reply" @click="handleReply(item)">
-                                            <img src="@/assets/img/icon/reply.png" alt="" >
-                                            <span class="data">回复</span>
-                                        </span>
-                                        <MyInput v-show="item._id == commentId && isShowMyInput" @ok="handlePublish($event,item._id)" class="child-input"/>
-                                </div> -->
+                                    <div class="child-content">
+                                        <span class="heat" @click="handleheat(item)">
+                                                <img v-if="!heatCheckedList.includes(item._id)" src="@/assets/img/icon/_love.png" alt="" >
+                                                <img v-else src="@/assets/img/icon/love-checked.png" alt="" >
+                                                <span class="data">{{heatCheckedList.includes(item._id)?item.heat+1 : item.heat}}</span>
+                                            </span>
+                                            <span class="reply" @click="handleReply(item)">
+                                                <img src="@/assets/img/icon/reply.png" alt="" >
+                                                <span class="data">回复</span>
+                                            </span>
+                                            <MyInput v-show="item._id == commentId && isShowMyInput" @ok="handlePublish($event,item._id)" class="child-input"/>
+                                    </div>
+
+                                    <!-- 子评论 第二个children开始 -->
+                                    <div >
+                                        <div class="_video-comments child" style="margin-left: -50px;">
+                                            <div v-for="(x,index) in item.children" :key="`comm-${index}`">
+                                                <div class="_video-omments-avatar">
+                                                    <img :src="require(`@/assets/img/avatar/${x.avatar}.png`)" alt="">
+                                                </div>
+                                                <div class="comment-data">
+                                                    <div class="username">
+                                                        <span>{{x.username}} > {{item.username}}</span>
+                                                        <span>{{x.createTime}}</span>
+                                                    </div>
+                                                    <div class="content" v-html="x.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <!-- 子评论 第二个children结束 -->
+
+                                    
 
                                 </div>
                             </div>
                         </div>
                     </div>
+
                    <!-- 子评论content 第一个childreen结束 -->
+                    <div v-if="item.showChildComment" class="show-more-reply back" @click="item.showChildComment=!item.showChildComment">
+                        <span>收起</span>
+                        <img src="@/assets/img/icon/arrow-up.png" alt="">
+                    </div>
 
                     
                     
@@ -133,7 +164,7 @@ export default {
             isShowMyInput:false,
             heatCheckedList:[],
             maxCommentLength:0,
-            step:5
+            step:5,
         })
 
 
@@ -274,6 +305,7 @@ $hoverColor:#ff2a14;
       margin-top: 20px !important;
       .comment-data{
           border-bottom: 0 !important;
+
       }
   }
 
@@ -296,6 +328,21 @@ $hoverColor:#ff2a14;
             width: 100%;
             border-bottom: 1px solid var(--commentbordercolor);
             padding-bottom: 16px;
+            .show-more-reply{
+                color: var(--commentusernamecolor);
+                font-size: 11px;
+                margin: 10px 0;
+                cursor: pointer;
+                img{
+                    width: 14px;
+                    height: 14px;
+                    vertical-align: top;
+                    margin-left: 2px;
+                }
+            }
+            .back{
+                margin-left: 50px;
+            }
             .username{
                 color: var(--commentusernamecolor);
                 font-size: 13px;

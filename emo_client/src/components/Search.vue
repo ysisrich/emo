@@ -2,7 +2,7 @@
     <div class="search-head" >
         <div class="search-head-title" v-if="isShowLogo">EMO</div>
         
-        <div class="search-head-box" :class="{fixed:goTopShow}">
+        <div class="search-head-box" :class="{fixed:goTopShow}" @keyup.enter="handleSearch">
             <input type="text" placeholder="客官慢点搜索！" v-model="searchData">
             <img src="@/assets/img/icon/search.png" alt="搜索" @click="handleSearch">
         </div>

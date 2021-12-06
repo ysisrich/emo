@@ -9,16 +9,16 @@
 </template>
 
 <script>
+import { reactive, toRefs } from '@vue/reactivity'
 import Emotion from './Emotion'
 export default {
-  props: {
-    height: {
-      type: Number,
-      default: 200,
-    }
+  props: ['height'],
+  components: {
+    Emotion
   },
-  data () {
-    return {
+
+  setup(props,content){
+    let data = reactive({
       list: [
         ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴'],
         ['睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过']
@@ -33,17 +33,20 @@ export default {
         ['弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你'],
         ['NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈'],
         ['磕头', '回头', '跳绳', '挥手', '激动', '街舞', '左太极', '右太极'],
-      ]
-    }
-  },
-  methods: {
-    clickHandler (i) {
+      ],
+      height:props.height || 200
+    })
+
+
+    const clickHandler = (i)=>{
       let emotion = `#${i};`
-      this.$emit('emotion', emotion)
+      content.emit('emotion', emotion)
     }
-  },
-  components: {
-    Emotion
+
+    return {
+      ...toRefs(data),
+      clickHandler
+    }
   }
 }
 </script>

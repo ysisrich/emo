@@ -31,6 +31,13 @@
 
 
     <div class="index-title">
+        <div id="movie">
+            <img src="@/assets/img/icon/movie.png"  alt="电影"> 电影
+        </div>
+        <div class="index-more-video">更多电影</div>
+    </div>
+
+    <div class="index-title">
         <div id="music">
             <img src="@/assets/img/icon/music.png"  alt="音乐"> 音乐
         </div>

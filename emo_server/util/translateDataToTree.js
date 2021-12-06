@@ -61,7 +61,6 @@
   module.exports =  (list) => {
     const res = [];
     const map = list.reduce((res, v) => (res[v._id] = v, res), {});
-console.log('map',map)
 
     for (const item of list) {
       if (item.commentId == '0') {

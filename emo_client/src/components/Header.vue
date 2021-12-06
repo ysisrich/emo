@@ -25,21 +25,26 @@ export default {
             },
             {
                 id:1,
-                title:'视频',
+                title:'短视频',
                 key:'video'
             },
             {
                 id:2,
+                title:'电影',
+                key:'movie'
+            },
+            {
+                id:3,
                 title:'音乐',
                 key:'music'
             },
             {
-                id:3,
+                id:4,
                 title:'文案',
                 key:'text'
             },
             {
-                id:4,
+                id:5,
                 title:'留言板',
                 key:'message'
             }]
