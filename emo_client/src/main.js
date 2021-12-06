@@ -4,8 +4,6 @@ import App from './App.vue'
 import router from './router';
 import store from './store';
 
-// import Antd from 'ant-design-vue';
-// import 'ant-design-vue/dist/antd.css';
 
 import { addColor } from './hooks/addColor';
 addColor(true)
@@ -20,7 +18,7 @@ import 'videojs-contrib-hls'
 import 'videojs-flash'
 // 如果你需要自定义播放器的样式，自己新建一个css
 
-
+import lazyLoad from './hooks/lazyLoad';
 
 
 const app = createApp(App);
@@ -30,7 +28,7 @@ const app = createApp(App);
 app.use(VideoPlayer)
 app.use(router)
 app.use(store)
-// app.use(Antd)
+app.use(lazyLoad)
 
 
 

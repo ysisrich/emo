@@ -7,12 +7,19 @@ const CommentsSchema = new Schema({
   username: String,
   avatar: String,  
   content:String,
-  heat: Number,  // ❤热度
+  heat: {
+    type:Number,
+    default:0
+  },  // ❤热度
   videoId: String,
+  commentId:{
+    type:String,
+    default:"0"
+  }, // 评论人的id
   createTime: {
-    type: Date,
-    default: Date.now()
-  },
+    type:Number,
+    default:new Date().getTime()
+  }
 })
 //创建模型对象
 const Comments = mongoose.model('Comments', CommentsSchema);

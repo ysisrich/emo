@@ -4,5 +4,5 @@ module.exports = {
 	interfaceUrl : "http://emo_node.yangsong.cool",
 
 	
-	onLineUrl : "https://emo.yangsong.cool/"
+	onLineUrl : "http://emo.yangsong.cool"
 }

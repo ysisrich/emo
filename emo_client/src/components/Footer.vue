@@ -28,19 +28,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .footer-copyright{
+@mixin flx($jc,$ai,$fd:row){
         display: flex;
-        justify-self: center;
-        align-self: center;
-        flex-direction: column;
+        flex-direction: $fd;
+        justify-content: $jc;
+        align-items: $ai;
+    }
+    .footer-copyright{
+        @include flx(center,center ,column );
+        width: 1205px;
         margin: 50px auto;
         color: var(--maincolor);
+        margin-top: 300px;
         span{
             display: block;
             width: 100%;
             height: 40px;
             line-height: 40px;
-            text-align: center;
+            @include flx(center,center );
             border: var(--mainbordercolor);
         }
     }

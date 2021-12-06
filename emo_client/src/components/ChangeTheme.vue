@@ -1,39 +1,44 @@
 <template>
     <span @click="addColor(false)"  class="skin">
-        <span v-if="theme_key == 'white'" @click="theme_key='black'">
+        <span v-if="theme_key == 'white'" @click="ChangeTheme">
             <img  src="@/assets/img/icon/black.png" alt="换肤" class="skin-icon" >
         </span>
-        <span v-else-if="theme_key === 'black'" @click="theme_key='white'">
+        <span v-else-if="theme_key === 'black'" @click="ChangeTheme">
             <img  src="@/assets/img/icon/white.png" alt="换肤" class="skin-icon" >
         </span> 
     </span>
 </template>
 
 <script>
-import { onMounted, reactive, ref,watch  } from 'vue';
+import { onMounted, reactive, ref,toRefs,watch  } from 'vue';
 
 import { addColor } from '../hooks/addColor';
+import {useStore} from 'vuex'
 
 export default {
   name: 'ChangeTheme',
   setup(){
-        let theme_key =ref(localStorage.theme)
-        // let data = reactive({
-        //     theme_key:'black'
-        // })
+        const store = useStore()
+
+
+        let data = reactive({
+            theme_key : localStorage.theme
+        })
+ 
 
         onMounted(()=>{
-            theme_key.value = localStorage.theme
+            data.theme_key = localStorage.theme
         })
 
-        watch(theme_key,(newValue,oldValue)=>{
-            console.log('sum的值变化了',newValue,oldValue)
-        })
+        function ChangeTheme(){
+            data.theme_key = data.theme_key=='black' ? 'white' :'black'
+            store.commit('changeTheme')
+        }
 
-      
         return {
-            theme_key,
-            addColor
+            ...toRefs(data),
+            addColor,
+            ChangeTheme
         }
     }
    

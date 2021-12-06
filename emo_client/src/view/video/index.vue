@@ -9,22 +9,23 @@
                 <div class="title">{{VideoInfo.title}}</div>
                 <div class="action">
                     <div>
-                        <span @click="isChecked = !isChecked">
-                            <img v-if="!isChecked " src="@/assets/img/icon/love.png" alt="">
+                        <span @click="handleHeat">
+                            <img v-if="!isChecked" src="@/assets/img/icon/heart-checked.png" alt="" >
                             <img v-else src="@/assets/img/icon/love-checked.png" alt="">
                             <span class="data">{{VideoInfo.heat}}</span>
                         </span>
+                        
                         <span>
-                            <img src="@/assets/img/icon/comment.png" alt="">
-                            <span class="data">{{VideoInfo.heat}}</span>
+                            <img  src="@/assets/img/icon/comment-black.png" alt="" >
+                            <span class="data">{{VideoInfo.commentLength}}</span>
                         </span>
 
-                        <span>
-                            <img src="@/assets/img/icon/share.png" alt="">
+                        <span @click="handleShare">
+                            <img  src="@/assets/img/icon/share-black.png" alt="" >
                             <span class="data">分享</span>
                         </span>
-                        <span>
-                            <img src="@/assets/img/icon/download.png" alt="">
+                        <span @click="handleDownload">
+                            <img src="@/assets/img/icon/download-black.png" alt="" >
                             <span class="data">下载</span>
                         </span>
                     </div>
@@ -36,7 +37,7 @@
             </div>
 
             <!-- 评论 -->
-                <Comment  :list="CommentList" />
+                <Comment   @getCommentLength="getCommentLength"/>
         </div>
 
         <div class="_video-other">
@@ -48,7 +49,10 @@
                     </div>
                     <div>
                         <span class="title">{{item.title}}</span>
-                        <span class="heat">🤍{{item.heat}}</span>
+                        <span class="heat">
+                            <img src="@/assets/img/icon/_love.png" alt="" >
+                            <span class="data">{{item.heat}}</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -59,49 +63,49 @@
 <script>
 import { reactive, toRefs } from '@vue/reactivity'
 import {useRoute,useRouter} from 'vue-router'
-import {getVideoOne,getVideoRecommendList,getCommentOne} from '../../../config/api'
+import {getVideoOne,getVideoRecommendList,getCommentOne,putVideoOne} from '../../../config/api'
 import MyVideo from '@/components/Video'
 import { onMounted, onUpdated,computed, onBeforeUpdate, watch} from '@vue/runtime-core'
-// import Comment from '@/components/video/Comment'
+import Comment from '@/components/video/Comment'
 import moment from 'moment'
-import {defineAsyncComponent } from 'vue'
+import config from '../../../config/index'
+
+import axios from 'axios'
+
+import {useStore} from 'vuex'
 
 export default {
     name: 'VideoIndex',
     components: {
         MyVideo,
-        Comment: defineAsyncComponent(() =>
-            import('@/components/video/Comment.vue')
-        )
+        Comment
+    },
+    computed:{
+        theme_key(){
+            const store = useStore()
+            return store.state.theme
+        }
     },
     
     setup() {
+
+        const route = useRoute()
+        const router = useRouter()
+        const store = useStore()
+
+
         let data = reactive({
             VideoInfo:{},
             VideoRecommendList:[],
             CommentList:[],
-            isChecked:false
+            isChecked:false,
         })
 
         
-
-        const route = useRoute()
-        const router = useRouter()
-
         getVideoOne({id:route.params.id}).then(res=>{
             if(res.code === 200){
                 data.VideoInfo = res.data
                 data.VideoInfo.createTime = moment(data.VideoInfo.createTime).format('YYYY-MM-DD HH:mm')
-            }else{
-                alert(res.msg)
-            }
-        })
-
-        getCommentOne({id:route.params.id}).then(res=>{
-            if(res.code == 200){
-                data.CommentList = res.data
-                data.CommentList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD'))
-                // console.log(data.CommentList)
             }else{
                 alert(res.msg)
             }
@@ -117,13 +121,26 @@ export default {
             }
         })
 
+        function getCommentLength(val){
+            console.log('评论条数',val)
+            data.VideoInfo.commentLength = val
+        }
+
         
 
        
         onMounted(()=>{
-            document.documentElement.scrollTop= 240
+            document.documentElement.scrollTop= 0
+
+
+            console.log(moment(new Date(1638719200393)).format('YYYY-MM-DD HH:mm:ss'))
         })
 
+        watch(() => route.path,() => {
+           data.isChecked = false
+        })
+
+        // 点推荐视频
         function handleRecommend(item){
             data.VideoInfo = item
             getVideoRecommendList({id:item._id}).then(res=>{
@@ -135,16 +152,77 @@ export default {
                 }
             })
 
-            
-
             router.push({path:`/video/${item._id}`})
         }
+
+        // 点爱心
+        function handleHeat(){
+            data.isChecked = !data.isChecked
+            putVideoOne({id:route.params.id,isChecked:data.isChecked}).then(res=>{
+                if(res.code === 200){
+                    data.VideoInfo.heat = data.isChecked ? data.VideoInfo.heat + 1 : data.VideoInfo.heat - 1
+                }else{
+                    alert(res.msg)
+                }
+            })
+        }
+
+        // 分享
+        function handleShare(){
+            let text = `我在emo网发现了『 ${data.VideoInfo.title} 』 快来看看 ${config.onLineUrl}#/video/${data.VideoInfo._id}`
+            handleCopy(text)
+            alert('链接已复制，感谢分享！')
+        }
+        // 复制链接
+		function handleCopy(text) {
+            var _input = document.createElement("input");   // 直接构建input
+            _input.value = text;  // 设置内容
+            document.body.appendChild(_input);    // 添加临时实例
+            _input.select();   // 选择实例内容
+            document.execCommand("Copy");   // 执行复制
+            document.body.removeChild(_input); // 删除临时实例
+        }
+
+        // 下载
+        function handleDownload(){
+            // window.open(data.VideoInfo.video_url)
+
+            // let a = document.createElement('a')
+            // a.href =data.VideoInfo.video_url
+            // a.click();
+
+            var elemIF = document.createElement('iframe')
+            elemIF.src = data.VideoInfo.video_url
+            elemIF.style.display = 'none'
+            document.body.appendChild(elemIF)
+            return 
+            axios({
+                method:'get',
+                url:data.VideoInfo.cover,
+                responseType: 'blob'  // 二进制流文件
+            }).then(res=>{
+                console.log('下载文件',res)
+                const link = document.createElement('a')
+                const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
+                link.style.display = 'none'
+                link.href = URL.createObjectURL(blob)
+                link.setAttribute('download', `${name}.xlsx`)
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            }).catch(req=>{console.log('error'+req)})
+        }
+
         
      
 
         return {
             ...toRefs(data),
-            handleRecommend
+            handleRecommend,
+            handleHeat,
+            getCommentLength,
+            handleShare,
+            handleDownload
         };
     }
 
@@ -161,7 +239,7 @@ export default {
     }
     ._video{
         @include flx(space-between,flex-start);
-        margin-top: 50px;
+        // margin-top: 50px;
         &-player{
             flex: 6;
             
@@ -188,11 +266,11 @@ export default {
                             cursor: pointer;
                             padding-right: 10px;
                             img{
-                                width: 20px;
-                                height: 20px;
+                                width: 30px;
+                                height: 30px;
                             }
                             .data{
-                                margin: 2px 0 5px 3px;
+                                margin: 0 0 0 3px;
                                 color: var(--indextimecolor);
                                 font-size: 16px;
                             }
@@ -248,6 +326,15 @@ export default {
                         }
                         .heat{
                             font-size: 12px;
+                            img{
+                                width: 15px;
+                                height: 15px;
+                                vertical-align: bottom;
+                            }
+                            .data{
+                                margin: 0 0 0 3px;
+                                color: var(--indextimecolor);
+                            }
                         }
                     }
                 }

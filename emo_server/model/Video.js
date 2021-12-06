@@ -6,7 +6,10 @@ const Schema = mongoose.Schema;
 const videosSchema = new Schema({
   title: String,
   category: Number, //  伤感 幽默  影视  游戏
-  heat: Number,  // ❤热度
+  heat:{
+    type:Number,
+    default:1000
+  },  // ❤热度
   cover: String,  // 封面
   createTime: {
     type: Date,

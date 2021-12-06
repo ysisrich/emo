@@ -1,26 +1,35 @@
 <template>
     <div class="search-head" >
-        <div class="search-head-title">EMO</div>
+        <div class="search-head-title" v-if="isShowLogo">EMO</div>
         
-        <div class="search-head-box" :class="{fixed:data.goTopShow}">
-            <input type="text" placeholder="客官慢点搜索！" v-model="data.searchData">
-            <img src="@/assets/img/icon/search.png" alt="搜索">
+        <div class="search-head-box" :class="{fixed:goTopShow}">
+            <input type="text" placeholder="客官慢点搜索！" v-model="searchData">
+            <img src="@/assets/img/icon/search.png" alt="搜索" @click="handleSearch">
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted, onUnmounted, reactive, watch  } from 'vue';
+import { onMounted, onUnmounted, reactive, toRefs, watch  } from 'vue';
 import {handleScroll} from '../hooks/handleScroll'
+
+import {useStore} from 'vuex'
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'Search',
+    props:["isShowLogo"],
+    setup(props){
 
-    setup(){
+        const store = useStore()
+        const router = useRouter()
+        console.log('展示logo',props)
+
         let data = reactive({
             searchData:'',
             scrollTop: '',
             goTopShow: false,
+            isShowLogo:props.isShowLogo
         })
 
         onMounted(()=>{
@@ -28,7 +37,6 @@ export default {
         })
        
         watch(()=>data.scrollTop,(o,n)=>{
-            // console.log(n)
             data.goTopShow = n > 250 
         })
 
@@ -36,8 +44,15 @@ export default {
             window.removeEventListener('scroll', ()=>handleScroll(data))
         })
 
+        function handleSearch(){
+            console.log(data.searchData)
+            const {href} = router.resolve({path: '/search'})
+            window.open(href,'_blank')
+        }
+
         return{
-            data
+            ...toRefs(data),
+            handleSearch
         }
     }
 };
@@ -56,8 +71,6 @@ export default {
         height: 150px;
         margin: 50px auto 0;
         background: var(--headerbgcolor);
-        // padding: 15px 0;
-        // font-weight: 700;
         &-title{
             font-size: 60px;
             color: #e50914;

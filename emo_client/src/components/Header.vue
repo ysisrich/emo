@@ -9,7 +9,8 @@
 
 <script>
 import { reactive } from '@vue/reactivity';
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
+import { onMounted } from '@vue/runtime-core';
 
 export default {
     name: 'Header',
@@ -29,29 +30,53 @@ export default {
             },
             {
                 id:2,
-                title:'音频',
-                key:'sound'
+                title:'音乐',
+                key:'music'
             },
             {
                 id:3,
-                title:'文字',
+                title:'文案',
                 key:'text'
+            },
+            {
+                id:4,
+                title:'留言板',
+                key:'message'
             }]
         })
 
         const router = useRouter()
+        const route = useRoute()
 
         
         function handleMenu(item){
             data.current = item.id
-            if(item.id == 0){
+            const dom = document.querySelector(`#${item.key}`)
+            console.log(dom)
+            dom.scrollIntoView()
+            const h = dom ? dom.getBoundingClientRect().top : 0
+            console.log(h)
+            
+            if(route.path !== '/index'){
                 router.push({name:'index'})
             }
+            // document.body.scrollTop = document.documentElement.scrollTop = h
         }
 
         function toIndex(){
             router.push({name:'index'})
         }
+
+
+
+
+        onMounted(()=>{
+            const video_dom = document.querySelector('#video')
+            console.log('标签dom',video_dom)
+
+            // video_dom.scrollIntoView()
+        })
+
 
         return{
             data,

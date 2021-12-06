@@ -5,10 +5,8 @@
             <span>
                 <img src="@/assets/img/icon/1.png" alt="">
             </span>
-            <div class="_video-comment-input" >
-                <input type="text" placeholder="留下你的精彩评论吧！" v-model="params.content">
-                <img src="@/assets/img/icon/publish.png" alt="发布" @click="handlePublish">
-            </div>
+            
+            <MyInput @ok="handlePublish"  />
         </div>
 
         <div class="_video-comments" >
@@ -21,10 +19,72 @@
                        <span>{{item.username}}</span>
                        <span>{{item.createTime}}</span>
                    </div>
-                   <div class="content">{{item.content}}</div>
+                   <div class="content" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
+
+                   <div class="child-content">
+                       <span class="heat" @click="handleheat(item)">
+                            <img v-if="!heatCheckedList.includes(item._id)" src="@/assets/img/icon/_love.png" alt="" >
+                            <img v-else src="@/assets/img/icon/love-checked.png" alt="" >
+                            <span class="data">{{heatCheckedList.includes(item._id)?item.heat+1 : item.heat}}</span>
+                        </span>
+                        <span class="reply" @click="handleReply(item)">
+                            <img src="@/assets/img/icon/reply.png" alt="" >
+                            <span class="data">回复</span>
+                        </span>
+                        <MyInput v-show="item._id == commentId && isShowMyInput" @ok="handlePublish($event,item._id)" class="child-input"/>
+                   </div>
+
+                   <!-- 子评论content 第一个childreen 开始 -->
+                    <div v-if="item.children && item.children.length">
+                        <div class="_video-comments child">
+                            <div v-for="(item,index) in item.children" :key="`comm-${index}`">
+                                <div class="_video-omments-avatar">
+                                    <img :src="require(`@/assets/img/avatar/${item.avatar}.png`)" alt="">
+                                </div>
+                                <div class="comment-data">
+                                <div class="username">
+                                    <span>{{item.username}}</span>
+                                    <span>{{item.createTime}}</span>
+                                </div>
+                                <div class="content" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
+
+                                <!-- <div class="child-content">
+                                    <span class="heat" @click="handleheat(item)">
+                                            <img v-if="!heatCheckedList.includes(item._id)" src="@/assets/img/icon/_love.png" alt="" >
+                                            <img v-else src="@/assets/img/icon/love-checked.png" alt="" >
+                                            <span class="data">{{heatCheckedList.includes(item._id)?item.heat+1 : item.heat}}</span>
+                                        </span>
+                                        <span class="reply" @click="handleReply(item)">
+                                            <img src="@/assets/img/icon/reply.png" alt="" >
+                                            <span class="data">回复</span>
+                                        </span>
+                                        <MyInput v-show="item._id == commentId && isShowMyInput" @ok="handlePublish($event,item._id)" class="child-input"/>
+                                </div> -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   <!-- 子评论content 第一个childreen结束 -->
+
+                    
+                    
+
                 </div>
             </div>
         </div>
+
+        <div class="comment-more" v-if="step < maxCommentLength">
+            <div @click="step +=2">
+                <span>更多评论</span> 
+                <span class="arrow-right">
+                    <img src="@/assets/img/icon/arrow-right.png" alt="">
+                </span>   
+            </div>
+        </div>
+
+        <div v-else class="comment-more noDataColot">没有更多数据了</div>
+
         
     </div>
 </template>
@@ -32,36 +92,61 @@
 <script>
 import { computed, reactive, toRefs  } from '@vue/reactivity';
 import {useRouter,useRoute} from 'vue-router'
-import {addComment,getCommentOne} from '../../../config/api'
+import {addComment,getCommentOne,putCommentOne} from '../../../config/api'
 import moment from 'moment'
 import { onMounted, onUpdated} from '@vue/runtime-core';
+import {watch} from 'vue'
+
+import {useStore} from 'vuex'
+import MyInput from '@/components/video/input'
+
+import toTree from '../../hooks/translateDataToTree'
 
 export default {
     name: 'Comment',
-    props:['list'],
-    setup(props){
-        console.log('评论',props.list)
-        const route = useRoute()
+    components:{MyInput},
+    computed:{
+        commentList(){
+            return this.commentList.filter((item,index) => index < this.step)
+        }
+    },
+    setup(props,content){
 
+        const route = useRoute()
+        const store = useStore()
+
+
+        let usernameArray = ['安安','灵魂共鸣','一支独秀','拾忆','Lucky','ミ灬╮等风来丶〆♥☜','早早先生','余生都是回忆','biu~你没了~',
+            '白菜豆角焖面','炸馒头片','我们见一面吧','终于','慢慢都是回忆','能再见一面吗','夜幕整点小酒'
+        ]
         let data = reactive({
             commentList:[],
             params:{
                 videoId:route.params.id,
-                username:'安安',
-                avatar:1,
-                content:''
+                username:usernameArray[Math.floor(Math.random()*(usernameArray.length+1))],
+                avatar:Math.floor(Math.random()*5),
+                content:'',
+                commentId:'0'
             },
-            list:[]
+            isShowEmotion:false,
+            commentId:'0',
+            isShowMyInput:false,
+            heatCheckedList:[],
+            maxCommentLength:0,
+            step:5
         })
 
 
         
-        let getCommentData = ()=>{
-            getCommentOne({id:data.params.videoId}).then(res=>{
+        let getCommentData = (id)=>{
+            getCommentOne({id:id || data.params.videoId}).then(res=>{
                 if(res.code == 200){
                     data.commentList = res.data
-                    data.commentList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD'))
-                    // console.log(data.commentList)
+                    data.commentList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm'))
+                    data.commentList = toTree(data.commentList)
+                    data.maxCommentLength = data.commentList.length
+                    console.log('评论列表',data.commentList)
+                    content.emit('getCommentLength',data.commentList.length)
                 }else{
                     alert(res.msg)
                 }
@@ -69,42 +154,82 @@ export default {
         }
 
         
+        onMounted(()=>getCommentData())
 
-        onMounted(()=>{
-            getCommentData()
+    
+
+        watch(() => route.path,() => {
+           getCommentData(route.params.id)
+           data.step = 5
+           data.params.videoId = route.params.id
         })
 
-        data.commentList = computed({
-            get(){
-                return data.list
-            },
-            set(value){
-                data.list = props.list
-            }
-        })
-
-        onUpdated(()=>{
-            data.commentList = data.list
-        })
 
         
 // 许个愿吧！希望家人和朋友们都快快乐乐的，希望自己也没有烦恼，一切顺顺利利
 
+        // 评论 或回复
+        let handlePublish = async (e,_id)=>{
 
-        let handlePublish = async ()=>{
-            
+            console.log(e,_id)
+
+            // return 
+            data.params.commentId = _id || '0'
+            data.params.username = usernameArray[Math.floor(Math.random()*(usernameArray.length+1))]
+            data.params.avatar = Math.floor(Math.random()*5)
+            data.params.content = e
+            if(!data.params.content){
+                alert('不能发布空的内容')
+                return false
+            }
+
             let res = await addComment(data.params)
             if(res.code == 200){
                 data.params.content = ''
+                data.isShowEmotion = false
+                data.isShowMyInput = false
                 getCommentData()
             }else{
                 alert(res.msg)
             }
         }
 
+        // 给评论点赞
+        function handleheat(item){
+            let index = data.heatCheckedList.findIndex(x => x == item._id)
+            index == -1 ? data.heatCheckedList.push(item._id) : data.heatCheckedList.splice(index,1)
+            putCommentOne({id:item._id,isChecked:data.heatCheckedList.includes(item._id)}).then(res=>console.log(res))
+        }
+
+        // 展示评论回复输入框
+        function handleReply(item){
+            if(data.commentId == item._id && data.isShowMyInput){
+                data.isShowMyInput = false
+            }else if(data.commentId == item._id && !data.isShowMyInput){
+                data.isShowMyInput = true
+            }else{
+                data.isShowMyInput = true
+                data.commentId = item._id                
+            }
+        }
+
+
+
+        // 将匹配结果替换表情图片
+        function  emotion (res) {
+            let word = res.replace(/\#|\;/gi,'')
+            const list = ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴', '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过', '酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢', '饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂', '疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见', '擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠', '鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀', '西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰', '凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀', '足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强', '弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手', '激动', '街舞', '献吻', '左太极', '右太极']
+            let index = list.indexOf(word)
+            return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" style="vertical-align: sub;" align="middle">`   
+        }
+
+
         return {
             ...toRefs(data),
-            handlePublish
+            handlePublish,
+            emotion,
+            handleheat,
+            handleReply
         }
     }
     
@@ -119,6 +244,7 @@ export default {
       align-items: $ai;
   }
 
+$hoverColor:#ff2a14;
   ._video-comment-title{
       color: var(--indextimecolor);
       font-size: 16px;
@@ -139,39 +265,16 @@ export default {
             height: 100%;
         }
     }
-
-    ._video-comment-input{
-            position: relative;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 45px;
-            border-radius: 10px;
-            // line-height: 55px;
-            box-shadow: 0 0 8px rgba($color: #000000, $alpha: .2);
-            background: var(--searchbgcolor);
-            overflow: hidden;
-            padding: 0 5px;
-            @include flx(space-evenly,center);
-            z-index: 99;
-            >input{
-                outline: none;
-                border: 0;
-                width:88%;
-                font-size: 16px;
-                background: inherit;
-                color: var(--maincolor);
-                margin-left: 13px;
-            }
-            >img{
-                width: 25px;
-                height: 25px;
-                margin: auto;
-                cursor: pointer;
-            }
-
-        }
+    
+    
      
+  }
+
+  .child{
+      margin-top: 20px !important;
+      .comment-data{
+          border-bottom: 0 !important;
+      }
   }
 
   ._video-comments{
@@ -208,6 +311,53 @@ export default {
                 color: var(--videoindextitltcolor);
                 font-size: 14px;
             }
+            >.child-content{
+                margin-top: 15px;
+                .heat{
+                    display: inline-block;
+                    // min-width: 40px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    padding-right: 15px;
+                    border-right:1px solid var(--commentchildheatsplit) ;
+                    
+                    img{
+                        width: 15px;
+                        height: 15px;
+                        vertical-align: sub;
+                    }
+                    .data{
+                        margin: 0 0 0 3px;
+                        color: var(--indextimecolor);
+                        &:hover{
+                            color: $hoverColor;
+                        }
+                    }
+                }
+                .reply{
+                    display: inline-block;
+                    width: 55px;
+                    font-size: 12px;
+                    text-align: right;
+                    cursor: pointer;
+                    img{
+                        width: 15px;
+                        height: 15px;
+                        vertical-align: sub;
+                    }
+                    .data{
+                        margin: 0 0 0 3px;
+                        color: var(--indextimecolor);
+                        &:hover{
+                            color: $hoverColor;
+                        }
+                    }
+                    
+                }
+                .child-input{
+                    margin-top: 15px;
+                }
+            }
         }
         
 
@@ -215,4 +365,41 @@ export default {
 
 
   }
+
+  .comment-more{
+      margin: 30px auto;
+      text-align: center;
+      color: var(--indextimecolor);
+      >div{
+        width: 220px;
+        height: 45px;
+        cursor: pointer;
+        @include flx(center,center );
+        border-radius: 10px;
+        margin: auto;
+        background: var(--commentmorebgcolor);
+        color: var(--indextimecolor);
+        span:nth-child(1){
+            display: inline-block;
+            width: fit-content;
+            height: 45px;
+            line-height: 45px;
+            &:hover{
+                color: $hoverColor;
+            }
+        }
+        .arrow-right{
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin: 0 7px;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+      }
+      
+  }
+ 
 </style>

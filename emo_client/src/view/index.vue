@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="index-title">
-        <div>
+        <div id="video">
             <img src="@/assets/img/icon/video.png"  alt="视频"> 视频
         </div>
         <div class="index-more-video">更多视频</div>
@@ -10,7 +10,7 @@
     <div class="index-content-video">
         <div v-for="(item,index) in data.videoList" :key="index" @click="handleVideo(item)">
             <div class="index-content-video-cover">
-                <img :src="item.cover" alt="">
+                <img v-lazyload="item.cover" alt="">
                 <span class="heat">🤍{{item.heat}}</span>
                 <div class="play_btn">
                     <img src="@/assets/img/icon/play.png"  alt="play">
@@ -26,9 +26,36 @@
                     <span class="time">{{item.dateTime}}</span>
                 </div>
             </div>
-
         </div>
     </div>
+
+
+    <div class="index-title">
+        <div id="music">
+            <img src="@/assets/img/icon/music.png"  alt="音乐"> 音乐
+        </div>
+        <div class="index-more-video">更多音乐</div>
+    </div>
+
+
+    <div class="index-title">
+        <div id="text">
+            <img src="@/assets/img/icon/text.png"  alt="文案"> 文案
+        </div>
+        <div class="index-more-video">更多文案</div>
+    </div>
+
+
+
+    <div class="index-title">
+        <div id="message">
+            <img src="@/assets/img/icon/message.png"  alt="留言板"> 留言板
+        </div>
+        <div class="index-more-video">留言板</div>
+    </div>
+
+
+
 
   </div>
 </template>
@@ -39,18 +66,9 @@ import { reactive } from '@vue/reactivity'
 import {getVideoList,addVideo} from '../../config/api'
 import dateParse from '../hooks/dateParse'
 import {useRouter} from 'vue-router'
+import {onMounted} from 'vue'
 
-
-//   title: String,
-//   category: Number, //  情感 幽默  影视  游戏
-//   heat: Number,  // ❤热度
-//   cover: String,  // 封面
-//   createTime: {
-//     type: Date,
-//     default: Date.now()
-//   },
-//   time:String,
-//   video_url:String
+import {useStore} from 'vuex'
 
 
 
@@ -112,12 +130,19 @@ let array = [
 
 export default {
     name: 'Index',
+    computed:{
+        searchKey(){
+            const store = useStore()
+            console.log(store.state.searchKey)
+            return store.state.searchKey
+        }
+    },
     setup(){
         var data = reactive({
             params:{
                 query:'',
                 currentPage:1,
-                size:10
+                size:9
             },
             videoList:[]
         })
@@ -138,8 +163,6 @@ export default {
         let handleVideo = (val)=>{
             router.push({path:`/video/${val._id}`})
         }
-    
-
         
         return {
             data,

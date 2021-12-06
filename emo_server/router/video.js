@@ -77,5 +77,30 @@ router.get('/getVideoRecommendList', async (req, res) => {
 })
 
 
+// 修改video数据
+router.post('/putVideoOne', async (req, res) => {
+	
+	//接收客户通过按钮页传过来的参数
+	console.log(req.body)
+
+	const {id,isChecked} = req.body
+	
+	const video = await Video.findOne({"_id" :  id});
+	console.log(video.heat)
+	if(video){
+		heat = isChecked ? video.heat + 1 : video.heat - 1
+		const resulet = await Video.updateOne({"_id" :  id},{$set:{heat}});
+
+		console.log(resulet)
+		if(resulet.modifiedCount){
+			res.json({code:200,msg:'成功！'})
+		}
+
+	}else{
+	  res.json({code:201,msg:'暂无数据！'})
+	}
+})
+
+
 
 module.exports = router

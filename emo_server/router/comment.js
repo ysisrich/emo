@@ -4,10 +4,11 @@ const Comment = require('../model/Comment')
 const pagination  = require('mongoose-sex-page')
 
 
-
 // 创建comment数据
 router.post('/addComment', (req, res) => {
     // console.log(req.body)
+
+	console.log(Date.now())
 	Comment.create(req.body, (err, Comment) => {
 	    if (err) {
 	      console.log(err)
@@ -39,6 +40,7 @@ router.get('/getCommentList', async (req, res) => {
 })
 
 
+
 // 根据id获取Comment
 router.get('/getCommentOne', async (req, res) => {
 	
@@ -55,17 +57,24 @@ router.get('/getCommentOne', async (req, res) => {
 	}
 })
 
-// 获取Comment数据推荐列表
-router.get('/getCommentRecommendList', async (req, res) => {
+// 修改Comment数据
+router.post('/putCommentOne', async (req, res) => {
 	
 	//接收客户通过按钮页传过来的参数
-	// console.log(req.query)
-	const {id} = req.query
+	console.log(req.body)
+	const {id,isChecked} = req.body
 	
-	const Comment = await Comment.find({"_id" : {"$ne": id}}).sort([['heat','desc']]).limit(10).exec();
-	
-	if(Comment){
-	  res.json({code:200,msg:'获取列表成功！',data:Comment})
+	const comment = await Comment.findOne({"_id" :  id});
+	console.log(comment.heat)
+	if(comment){
+		heat = isChecked ? comment.heat + 1 : comment.heat - 1
+		const resulet = await Comment.updateOne({"_id" :  id},{$set:{heat}});
+
+		console.log(resulet)
+		if(resulet.modifiedCount){
+			res.json({code:200,msg:'成功！'})
+		}
+
 	}else{
 	  res.json({code:201,msg:'暂无数据！'})
 	}

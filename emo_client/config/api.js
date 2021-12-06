@@ -29,6 +29,4 @@ export const addComment = (params={}) => post('/comment/addComment',params);
 
 export const getCommentOne = (params={}) => get('/comment/getCommentOne',params);
 
-export const getCommentRecommendList = (params={}) => get('/comment/getCommentRecommendList',params);
-
 export const putCommentOne = (params={}) => post('/comment/putCommentOne',params);
