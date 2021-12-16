@@ -3,6 +3,7 @@
 const default_layout = () => require.ensure([], (require) => require("../layout/default_layout"))
 const index = () => require.ensure([], (require) => require("../view/index"))
 const video = () => require.ensure([], (require) => require("../view/video/index"))
+const movie = () => require.ensure([], (require) => require("../view/movie/index"))
 
 const search_layout = () => require.ensure([], (require) => require("../layout/search_layout"))
 const search = () => require.ensure([], (require) => require("../view/search/index"))
@@ -26,6 +27,12 @@ const routes = [
         path: "/video/:id",
         name: "video",
         component: video,
+        meta: { title: '视频-emo情绪' }
+      },
+      {
+        path: "/movie/:id",
+        name: "movie",
+        component: movie,
         meta: { title: '视频-emo情绪' }
       }
     ]

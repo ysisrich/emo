@@ -42,7 +42,7 @@ props:['video','cover'],
                 loop: false, //循环播放
                 mirror: false, //镜像画面
                 ligthOff: false, //关灯模式
-                volume: 0.3, //默认音量大小
+                volume: 0.5, //默认音量大小
                 control: true, //是否显示控制
                 controlBtns: [
                     "audioTrack",
@@ -60,10 +60,16 @@ props:['video','cover'],
         })
 
         watch(()=>route.path,()=>{
-            console.log(props)
             data.options.src = props.video
             data.cover = props.cover
         })
+
+
+        watch(()=>route.params.movie_url,()=>{
+          console.log(222,route.params)
+            data.options.src = route.params.movie_url
+        })
+        
 
         return {
             ...toRefs(data)
@@ -75,5 +81,5 @@ props:['video','cover'],
 </script>
 
 <style lang="scss" scoped>
-
+ 
 </style>

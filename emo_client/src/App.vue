@@ -23,6 +23,23 @@ export default {
     ChangeTheme,BackTop,Record
   },
   setup(){
+
+    // 禁止选中
+    document.body.onselectstart = function(){
+    　　return false;
+    }
+
+    // 禁止右键
+    document.oncontextmenu =function(){
+      return false
+    }
+
+    // 禁止f12
+    document.onkeydown =function(e){
+      if(e.keyCode == 123){
+        // return false
+      }
+    }
         
     }
 }

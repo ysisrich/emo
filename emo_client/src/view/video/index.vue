@@ -123,7 +123,6 @@ export default {
         })
 
         function getCommentLength(val){
-            console.log('评论条数',val)
             data.VideoInfo.commentLength = val
         }
 
@@ -132,9 +131,6 @@ export default {
        
         onMounted(()=>{
             document.documentElement.scrollTop= 0
-
-
-            console.log(moment(new Date(1638719200393)).format('YYYY-MM-DD HH:mm:ss'))
         })
 
         watch(() => route.path,() => {
@@ -186,16 +182,16 @@ export default {
 
         // 下载
         function handleDownload(){
-            // window.open(data.VideoInfo.video_url)
+            window.open(data.VideoInfo.video_url)
 
             // let a = document.createElement('a')
             // a.href =data.VideoInfo.video_url
             // a.click();
 
-            var elemIF = document.createElement('iframe')
-            elemIF.src = data.VideoInfo.video_url
-            elemIF.style.display = 'none'
-            document.body.appendChild(elemIF)
+            // var elemIF = document.createElement('iframe')
+            // elemIF.src = data.VideoInfo.video_url
+            // elemIF.style.display = 'none'
+            // document.body.appendChild(elemIF)
             return 
             axios({
                 method:'get',
@@ -240,7 +236,7 @@ export default {
     }
     ._video{
         @include flx(space-between,flex-start);
-        // margin-top: 50px;
+        margin-top: 20px;
         &-player{
             flex: 6;
             

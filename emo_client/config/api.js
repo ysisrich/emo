@@ -30,3 +30,33 @@ export const addComment = (params={}) => post('/comment/addComment',params);
 export const getCommentOne = (params={}) => get('/comment/getCommentOne',params);
 
 export const putCommentOne = (params={}) => post('/comment/putCommentOne',params);
+
+
+
+
+/*
+* 影视 movie
+*
+*/
+
+export const getMovieList = (params={}) => get('/movie/getMovieList',params);
+
+export const addMovie = (params={}) => post('/movie/addMovie',params);
+
+export const getMovieOne = (params={}) => get('/movie/getMovieOne',params);
+
+export const putMovieOne = (params={}) => post('/movie/putMovieOne',params);
+
+
+/*
+* 留言 message 
+*
+*/
+
+export const getMessageList = (params={}) => get('/message/getMessageList',params);
+
+export const addMessage = (params={}) => post('/message/addMessage',params);
+
+export const getMessageOne = (params={}) => get('/message/getMessageOne',params);
+
+export const putMessageOne = (params={}) => post('/message/putMessageOne',params);

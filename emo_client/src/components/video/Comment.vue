@@ -78,11 +78,27 @@
                                                         <span>{{x.createTime}}</span>
                                                     </div>
                                                     <div class="content" v-html="x.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"> </div>
+
+                                                    <!-- <div class="child-content">
+                                                    <span class="heat" @click="handleheat(x)">
+                                                            <img v-if="!heatCheckedList.includes(x._id)" src="@/assets/img/icon/_love.png" alt="" >
+                                                            <img v-else src="@/assets/img/icon/love-checked.png" alt="" >
+                                                            <span class="data">{{heatCheckedList.includes(x._id)?x.heat+1 : x.heat}}</span>
+                                                        </span>
+                                                        <span class="reply" @click="handleReply(x)">
+                                                            <img src="@/assets/img/icon/reply.png" alt="" >
+                                                            <span class="data">回复</span>
+                                                        </span>
+                                                        <MyInput v-show="x._id == commentId && isShowMyInput" @ok="handlePublish($event,x._id)" class="child-input"/>
+                                                    </div> -->
+
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        
                                     <!-- 子评论 第二个children结束 -->
 
                                     
@@ -168,16 +184,39 @@ export default {
         })
 
 
+
+        // let towTree = (list) =>{
+        //     list.forEach(item,index =>{
+        //         // item 第一个元素 楼主 第一层
+        //         if(item.children && item.children.length){
+        //             item.children.forEach(x =>{
+        //                 let obj = {
+        //                     ...item,
+        //                     children:x
+        //                 }
+        //                 res.push(obj)
+        //                 towTree(item.children)
+        //             })
+        //         }else{
+        //             res.push(item)
+        //         }
+        //     })
+        // }
+
+
         
         let getCommentData = (id)=>{
             getCommentOne({id:id || data.params.videoId}).then(res=>{
                 if(res.code == 200){
                     data.commentList = res.data
                     data.commentList.map(item => item.createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm'))
-                    data.commentList = toTree(data.commentList)
                     data.maxCommentLength = data.commentList.length
                     console.log('评论列表',data.commentList)
                     content.emit('getCommentLength',data.commentList.length)
+                    data.commentList = toTree(data.commentList)
+                    console.log('评论列表',data.commentList)
+
+
                 }else{
                     alert(res.msg)
                 }
@@ -342,6 +381,7 @@ $hoverColor:#ff2a14;
             }
             .back{
                 margin-left: 50px;
+                margin-top: 0px;
             }
             .username{
                 color: var(--commentusernamecolor);
@@ -359,7 +399,7 @@ $hoverColor:#ff2a14;
                 font-size: 14px;
             }
             >.child-content{
-                margin-top: 15px;
+                margin-top: 10px;
                 .heat{
                     display: inline-block;
                     // min-width: 40px;
