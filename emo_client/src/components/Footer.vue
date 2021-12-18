@@ -2,6 +2,11 @@
     <div class="footer-copyright">
        <span>© {{data.projectName}} | {{data.record}}</span>
        <span>“爱情是找不到的，所以人们才说“坠入爱河”.你不能有意坠入”</span>
+      
+       <span>友情链接：
+           <a href="https://www.chok8.com/">chok8电影院</a>
+           <a href="https://www.zxzj.fun/">在线之家</a>
+       </span>
     </div>
 </template>
 
@@ -47,6 +52,11 @@ export default {
             line-height: 40px;
             @include flx(center,center );
             border: var(--mainbordercolor);
+
+            a{
+                text-decoration: none;
+                margin-right: 20px;
+            }
         }
     }
 </style>
