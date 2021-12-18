@@ -233,6 +233,49 @@ let movies = [
         starring:'小罗伯特·唐尼,克里斯·埃文斯,斯嘉丽·约翰,逊克里斯·海姆斯沃斯', // 主演
         releaseTime:'2019-04-24', // 上映时间
         clarity:0 // 清晰度 0 蓝光 1 超清 2 高清 3 清晰 4 枪版
+    },
+    {
+        title: '旺达幻视',
+        category: 1, // 0 电影  1 电视剧 
+        cover: 'https://tva4.sinaimg.cn/large/61ac6637gy1gmp0l58xzvj207i0b3gm4.jpg',  // 封面
+        movie_url: ["https://vod.pipi.cn/8f6897d9vodgzp1251246104/a441e88a387702291405312717/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/a947cd93387702291405564753/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/a6de3cc5387702291405450025/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/a6ac5732387702291405428096/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/a935b139387702291405554688/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/a948ef3f387702291405566988/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/a9364a18387702291405555965/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/a936b471387702291405556165/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/a8ebb64c387702291405511943/f0.mp4"],
+        country:'美国',
+        description:'',
+        starring:'伊丽莎白·奥尔森,保罗·贝坦尼,凯特·戴琳斯,泰柔娜·派丽丝', // 主演
+        releaseTime:'2021-03-05', // 上映时间
+        clarity:0 // 清晰度 0 蓝光 1 超清 2 高清 3 清晰 4 枪版
+    },
+    
+    {
+        title: '洛基第一季',
+        category: 1, // 0 电影  1 电视剧 
+        cover: 'https://tva4.sinaimg.cn/large/61ac6637gy1grc2lhn05dj207i0b4mxt.jpg',  // 封面
+        movie_url: ["https://vod.pipi.cn/8f6897d9vodgzp1251246104/0da9dafe387702292074980984/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/452a4870387702292075016952/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/0b2000b5387702292074853643/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/0d2c31ec387702292074912404/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/0d8a7319387702292074969081/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/45399649387702292075021652/f0.mp4"],
+        country:'美国',
+        description:'',
+        starring:'汤姆·希德勒斯顿,欧文·威尔逊,古古·姆巴塔-劳,索菲娅·迪·马蒂诺,乌米·马萨库', // 主演
+        releaseTime:'2021-07-14', // 上映时间
+        clarity:0 // 清晰度 0 蓝光 1 超清 2 高清 3 清晰 4 枪版
+    },
+    {
+        title: '鹰眼',
+        category: 1, // 0 电影  1 电视剧 
+        cover: 'https://p9.toutiaoimg.com/img/tos-cn-i-siecs4i2o7/4621fa12388846ef83c4002c67e29173~noop.image',  // 封面
+        movie_url: ["https://vod.pipi.cn/8f6897d9vodgzp1251246104/dbe873b6387702291915559503/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/dc1d10be387702291915586394/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/0f8c16de387702292247595539/f0.mp4",
+        "https://vod.pipi.cn/8f6897d9vodgzp1251246104/eb3ada1e387702292576814684/f0.mp4","https://vod.pipi.cn/8f6897d9vodgzp1251246104/8fe703d9387702292907646138/f0.mp4"],
+        country:'美国',
+        description:'',
+        starring:'汤姆·希德勒斯顿,欧文·威尔逊,古古·姆巴塔-劳,索菲娅·迪·马蒂诺,乌米·马萨库', // 主演
+        releaseTime:'2021-12-15', // 上映时间
+        clarity:0 // 清晰度 0 蓝光 1 超清 2 高清 3 清晰 4 枪版
     }
 ]
 

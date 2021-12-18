@@ -3,10 +3,12 @@
        <span>© {{data.projectName}} | {{data.record}}</span>
        <span>“爱情是找不到的，所以人们才说“坠入爱河”.你不能有意坠入”</span>
       
+       
        <span>友情链接：
            <a href="https://www.chok8.com/" target="_blank">chok8电影院</a>
            <a href="https://www.zxzj.fun/" target="_blank">在线之家</a>
        </span>
+       <span class="tip">本站资源均网络搜集，如有关视频侵犯了你的权益，请联系邮箱：2048400850@qq.com，本站将于24小时内删除！</span>
     </div>
 </template>
 
@@ -58,6 +60,9 @@ export default {
                 margin-right: 20px;
                 color: var(--indextimecolor);
             }
+        }
+        .tip{
+            color: var(--indextimecolor);
         }
     }
 </style>
